@@ -2,8 +2,6 @@ package run
 
 import (
 	"fmt"
-	"github.com/hary654321/gonmap"
-	"github.com/lcvvvv/stdio/chinese"
 	"net"
 	"net/http"
 	"net/url"
@@ -18,6 +16,10 @@ import (
 	"zrWorker/core/slog"
 	"zrWorker/global"
 	"zrWorker/lib/appfinger"
+
+	"github.com/hary654321/gonmap"
+	"github.com/lcvvvv/stdio/chinese"
+
 	//"zrWorker/lib/chrome"
 	"zrWorker/lib/color"
 	domain2 "zrWorker/lib/domain"
@@ -46,6 +48,8 @@ type Engine struct {
 	HydraScanner  *scanner.HydraClient
 	RunTaskId     string
 	Start         bool
+	Total         int
+	Done          int
 }
 
 func NewEngine(runTaskID string) (*Engine, bool) {
@@ -226,6 +230,11 @@ func (e *Engine) stop() {
 		e.HydraScanner.Stop()
 		slog.Println(slog.DEBUG, "任务"+e.RunTaskId+"检测到所有暴力破解任务已完成，暴力破解引擎已停止")
 	}
+}
+
+func (e *Engine) GetPercent() int {
+	done := e.DomainScanner.DoneCount() + e.IPScanner.DoneCount()
+	return done / e.Total * 100
 }
 
 func generateDomainScanner(runTaskID string, wg *sync.WaitGroup) *scanner.DomainClient {
@@ -483,7 +492,7 @@ func (e *Engine) watchDog() {
 			nURL    = e.URLScanner.RunningThreads()
 			nHydra  = e.HydraScanner.RunningThreads()
 		)
-		warn := fmt.Sprintf("任务"+e.RunTaskId+"当前存活协程数：Domain：%d 个，IP：%d 个，Port：%d 个，URL：%d 个，Hydra：%d 个", nDomain, nIP, nPort, nURL, nHydra)
+		warn := fmt.Sprintf("任务"+e.RunTaskId+"当前存活协程数：Domain：%d 个，IP：%d 个，Port：%d 个，URL：%d 个，Hydra：%d 个  ,进度：%d", nDomain, nIP, nPort, nURL, nHydra, e.GetPercent())
 		total := nDomain + nIP + nPort + nURL + nHydra
 		if total == 0 && e.Start {
 			e.stop()

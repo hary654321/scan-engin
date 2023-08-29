@@ -30,6 +30,10 @@ func (c *client) IsDone() bool {
 	return c.pool.Done
 }
 
+func (c *client) DoneCount() int {
+	return int(c.pool.DoneCount)
+}
+
 func (c *client) RunningThreads() int {
 	return c.pool.RunningThreads()
 }

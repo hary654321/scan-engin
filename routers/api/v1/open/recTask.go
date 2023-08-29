@@ -1,7 +1,6 @@
 package open
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
 	"zrWorker/app"
@@ -12,6 +11,8 @@ import (
 	"zrWorker/pkg/e"
 	"zrWorker/pkg/utils"
 	"zrWorker/run"
+
+	"github.com/gin-gonic/gin"
 )
 
 func RecTask(c *gin.Context) {
@@ -40,6 +41,9 @@ func RecTask(c *gin.Context) {
 	}
 	if mul != "" {
 		strArrayNew := strings.Split(mul, ",")
+
+		engine.Total = len(strArrayNew)
+
 		for _, v := range strArrayNew {
 			slog.Println(slog.DEBUG, v)
 			go engine.PushTarget(v)

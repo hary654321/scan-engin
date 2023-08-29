@@ -1,7 +1,6 @@
 package open
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"path"
 	"zrWorker/app"
@@ -11,6 +10,8 @@ import (
 	"zrWorker/pkg/e"
 	"zrWorker/pkg/utils"
 	"zrWorker/run"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetZip(c *gin.Context) {
@@ -62,7 +63,7 @@ func GetTaskRes(c *gin.Context) {
 		utils.PrinfI("res", taskInfo.Res)
 		delete(app.Setting.TaskPercent, runTaskId)
 	} else {
-		taskInfo.Progress = getPercent(runTaskId)
+		taskInfo.Progress = TaskEngine.GetPercent()
 	}
 	code := e.SUCCESS
 	c.JSON(http.StatusOK, gin.H{
@@ -70,17 +71,6 @@ func GetTaskRes(c *gin.Context) {
 		"msg":  e.GetMsg(code),
 		"data": taskInfo,
 	})
-}
-
-// 虚拟进度
-// 虚拟进度
-func getPercent(runTaskId string) int {
-
-	if app.Setting.TaskPercent[runTaskId] < 90 {
-		app.Setting.TaskPercent[runTaskId] += 10
-	}
-
-	return app.Setting.TaskPercent[runTaskId]
 }
 
 func Image(c *gin.Context) {
