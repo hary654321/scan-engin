@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"fmt"
-	"github.com/fvbock/endless"
 	"os"
 	"strings"
 	"syscall"
@@ -20,6 +19,8 @@ import (
 	"zrWorker/pkg/setting"
 	"zrWorker/pkg/utils"
 	"zrWorker/routers"
+
+	"github.com/fvbock/endless"
 )
 
 func init() {
@@ -43,7 +44,7 @@ func main() {
 	InitKscan()
 
 	//http server
-	err := server.ListenAndServe()
+	err := server.ListenAndServeTLS("/zrtx/config/cyberspace/.cert.pem", "/zrtx/config/cyberspace/.key.pem")
 	if err != nil {
 		slog.Printf(slog.DEBUG, "Server err: %v", err)
 	}
