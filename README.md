@@ -1,92 +1,178 @@
-# scan-engin
+# zrWorker
+
+  一款资产巡航扫描系统。系统定位是通过masscan+nmap无限循环去发现新增资产，自动进行端口弱口令爆破/、指纹识别、XrayPoc扫描。主要功能包括: `资产探测`、`端口爆破`、`Poc扫描`、`指纹识别`、`定时任务`、`管理后台识别`、`报表展示`。 使用场景是Docker搭建好之后，设置好你要扫描的网段跟爆破任务。就不要管他了，没事过来收漏洞就行了
 
 
 
-## Getting started
+### 功能清单
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- [x] masscan+namp巡航扫描资产
+- [x] 创建定时爆破任务(FTP/SSH/SMB/MSSQL/MYSQL/POSTGRESQL/MONGOD)
+- [x] 管理后台识别
+- [x] 结果导出
+- [x] 报表展示
+- [x] docker一键部署 [21-02-08] 
+- [x] CMS识别 - 结合威胁情报、如果某个CMS爆出漏洞，可以快速定位企业内部有多少资产 [21-02-20]
+- [x] poc扫描 - 调用xray的Poc,对新发现的资产自动扫描poc [21-02-20]
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## 预览
+tip:如果图片加载不出来,[点我去gitee看图片](https://gitee.com/awake1t/zrWorker)
 
+**首页**
+![image](https://github.com/awake1t/zrWorker/blob/master/img/index.gif)
+
+**资产列表**
+![image](https://gitee.com/awake1t/zrWorker/raw/master/img/ip.png)
+
+**敏感后台**
+![image](https://gitee.com/awake1t/zrWorker/raw/master/img/login.png)
+
+**指纹管理**
+![image](https://github.com/awake1t/zrWorker/blob/master/img/finger.gif)
+
+**任务列表**
+![image](https://github.com/awake1t/zrWorker/blob/master/img/task.gif)
+
+**任务详情**
+![image](https://gitee.com/awake1t/zrWorker/raw/master/img/task-de.png)
+
+**xray**
+![image](https://gitee.com/awake1t/zrWorker/raw/master/img/xray.png)
+![image](https://gitee.com/awake1t/zrWorker/raw/master/img/xray-poc.png)
+
+
+**设置**
+![image](https://github.com/awake1t/zrWorker/blob/master/img/setting.gif)
+
+
+
+
+
+**管理后台识别**
+
+  不论甲方乙方。大家在渗透一个网站的时候，很多时候都想尽快找到后台地址。zrWorker对自己的资产库进行Title识别。然后根据title关键字、url关键字、body关键字(比如url中包含login、body中包含username/password)进行简单区分后台。帮助我们渗透中尽快锁定后台。 
+
+
+
+**指纹识别**
+
+  系统会对新发现的资产进行一遍指纹识别, 也可以手动新增指纹。比如某个CMS爆出漏洞，新增指纹扫描一遍系统中存在的资产。可以快速定位到漏洞资产，对于渗透打点或者甲方应急都是极好的
+
+
+
+**POC扫描**
+
+  对于任何一个扫描系统，poc扫描都是必不可少的。但是poc的更新一直是所有开源项目面临的一个问题。综合考虑用Xray的poc,系统集成的XRAY版本是1.7.0,感谢Xray对安全圈做出的贡献！ zrWorker会对每次新发现的资产进行一遍Xray的Poc扫描。如果发现漏洞会自动入库，可以可视化查看漏洞结果
+
+
+
+**资产巡航更新**
+
+  masscan可以无限扫描，但是对于失效资产我们也不能一直保存。zrWorker通过动态设置资产扫描周期，对于N个扫描周期都没有扫描到的资产会进行删除。保存资产的时效性
+
+
+
+## 安装
+
+### Docker安装
+
+#### 如果部署在本地体验(本地机器或者自己的虚拟机)
+
+如果是**本地体验**下，直接运行如下命令
+
+```bash
+git clone https://github.com/awake1t/zrWorker
+cd zrWorker
+docker-compose up -d
 ```
-cd existing_repo
-git remote add origin https://git.zorelworld.com/wangrui/scan-engin.git
-git branch -M main
-git push -uf origin main
+
+运行结束后,运行`docker container ls -a`看下是否运行正常
+
+![image](https://github.com/awake1t/zrWorker/blob/master/img/docker.png)
+
+web访问 http://ip:8001
+登录账号:zrWorker
+登录密码:zrWorker5s
+
+
+| Web账号     | zrWorker | zrWorker5s |
+| ----------- | -------- | ---------- |
+| 类型        | 用户名   | 密码       |
+| mysql数据库 | root     | zrWorker8s |
+
+### 注: 首次运行在设置里修改扫描的网段范围,点击保存后就行了。然后耐心等待系统自动扫描，扫描耗时您配置的网段+端口+速率会有变化
+
+
+
+
+#### 如果部署在服务器上(地址不是127.0.0.1情况)
+
+```bash
+git clone https://github.com/awake1t/zrWorker
+cd zrWorker/web
+
+# 把 YourServerIp 换成你的IP地址
+sed -i 's#http://127.0.0.1:18000#http://YourServerIp:18000#g' ./dist/js/app.4dccb236.js && sed -i 's#http://127.0.0.1:18000#http://YourServerIp:18000#g' ./dist/js/app.4dccb236.js.map
+
+
+# 重要！！！ 如果之前安装过，使用如下命令删除所有名字包含zrWorker的历史镜像
+docker rmi $(docker images | grep "zrWorker" | awk '{print $3}') 
+
+
+# 返回到 zrWorker的目录下
+cd ../
+docker-compose up -d
+
+一般这时候就部署好了,如果访问不了. 要确认下服务器上安全组的8001和18000有没有打开.
 ```
+![image](https://github.com/awake1t/zrWorker/blob/master/img/docker2.png)
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://git.zorelworld.com/wangrui/scan-engin/-/settings/integrations)
 
-## Collaborate with your team
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## 未来
 
-## Test and Deploy
+  我觉得一个好的工具就是 **拿来就用、用完既走**。后期会加入漏洞的机器人通知，发现漏洞自动通知到机器人，连你登录系统的步骤都省略。 或者看有没有方式把Goby集成。加油，干饭人！
 
-Use the built-in continuous integration in GitLab.
+## 更新日志
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- [x] [2021-0210] 指纹资产管理、增删改查
+- [x] [2021-0210] 优化资产的查询方式
+- [x] [2021-0213] 发现资产POC自动扫描、扫描结果界面查看、删除
+- [x] [2021-0214] 密码修改功能，关闭Xray-server-error
+- [x] [2021-0215] Docker折腾了好久
+- [x] [2021-0225] 更新docker-compose的部署方式
 
-***
+## 常见问题
 
-# Editing this README
+**Q: 为什么安装后，点击登录没有反应？？**
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+A:大概率是你的部署的服务器地址不是 **127.0.0.1**, 所以会登录不上。 解决参考安装方式中： “如果部署在服务器上(地址不是127.0.0.1情况)”。 如果你的部署服务器地址是127.0.0.1,登录没反应。提供F12网络中的请求包截图，环境，部署方式到ISSUE。
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+**Q: 怎么知道服务器的某个端口有没有打开**
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+A: 比如8002端口, 在服务器上使用命令 `python3 -m http.server 8002` 启动一个临时WebServer. 然后在自己本地电脑 `curl -v http://ip:8002` 如果有返回,就代表服务器端口是开的. 
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+**Q: 出现 Service 'web' failed to build : Error parsing reference: "nginx:1.15.3-alpine as production-stage" is not a valid repository/tag: invalid reference format？？报错**
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+A: docker版本过低,查看docker的版本 `docker --version`。 解决: 需要升级docker的版本, 我的docker版本,  Docker version 19.03.4, build 9013bf5[docker升级参考](:https://github.com/xej520/Record-Share-Progress/blob/master/003---docker/007---%E5%A6%82%E4%BD%95%E5%8D%87%E7%BA%A7docker%E7%9A%84%E7%89%88%E6%9C%AC.md)
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## 致谢
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+https://github.com/ysrc/xunfeng
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+https://github.com/chaitin/xray
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+# 404StarLink 2.0 - Galaxy
+![](https://github.com/knownsec/404StarLink-Project/raw/master/logo.png)
 
-## License
-For open source projects, say how it is licensed.
+zrWorker 是 404Team [星链计划2.0](https://github.com/knownsec/404StarLink2.0-Galaxy)中的一环，如果对zrWorker  有任何疑问又或是想要找小伙伴交流，可以参考星链计划的加群方式。
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- [https://github.com/knownsec/404StarLink2.0-Galaxy#community](https://github.com/knownsec/404StarLink2.0-Galaxy#community)

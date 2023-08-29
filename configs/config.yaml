@@ -1,0 +1,36 @@
+Server:
+  RunMode: debug
+  HttpPort: 18001
+  ReadTimeout: 60
+  WriteTimeout: 60
+  Version: 1.1.1
+  BasicAuth: Basic enc6Y2g=
+  LogPath: /zrtx/log/cyberspace
+  ScanPath: /zrtx/bin/cyberspace
+  LifeWindow: 1440
+App:
+  #  协程数
+  Threads: 2000
+  Detailed: false
+  #每秒扫描的ip数
+  ScanSpeed: 5000
+  DefaultPageSize: 10
+  MaxPageSize: 100
+  DefaultContextTimeout: 60
+  JwtSecret: fas65fd4541e352231a#D12
+Database:
+  DBType: mysql
+  UserName: root
+  Password: root
+  #  Host: mysql
+  Host: 127.0.0.1:3306
+  DBName: client
+  TablePrefix:
+  Charset: utf8
+  ParseTime: True
+  MaxIdleConns: 10
+  MaxOpenConns: 30
+Es:
+  Host: http://127.0.0.1:9200
+  User: hary
+  Pwd: hary
