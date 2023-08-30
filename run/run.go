@@ -233,6 +233,11 @@ func (e *Engine) stop() {
 }
 
 func (e *Engine) GetPercent() int {
+
+	if e.Total == 0 {
+		return 0
+	}
+
 	done := e.DomainScanner.DoneCount() + e.IPScanner.DoneCount()
 	return done / e.Total * 100
 }

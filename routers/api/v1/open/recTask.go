@@ -19,10 +19,12 @@ func RecTask(c *gin.Context) {
 	runTaskID := c.PostForm("runTaskId")
 	taskId := c.PostForm("taskId")
 
+	slog.Println(slog.DEBUG, "runTaskID:", runTaskID, taskId)
+
 	c.SaveUploadedFile(f, "./"+f.Filename)
 
 	mul := utils.Read("./" + f.Filename)
-	slog.Println(slog.DEBUG, "mul:", mul, runTaskID, taskId)
+	// slog.Println(slog.DEBUG, "mul:", mul, runTaskID, taskId)
 	engine, newT := run.NewEngine(runTaskID)
 	if !newT {
 		c.JSON(http.StatusOK, gin.H{

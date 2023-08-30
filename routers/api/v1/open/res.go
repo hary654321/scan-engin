@@ -59,7 +59,7 @@ func GetTaskRes(c *gin.Context) {
 	//被删除了  说明执行完成了
 	if TaskEngine == nil {
 		taskInfo.Progress = 100
-		//taskInfo.Res = utils.Read(utils.GetLogPath(runTaskId, "ipInfo"))
+		taskInfo.Res = utils.Read(utils.GetLogPath(runTaskId, "ipInfo"))
 		utils.PrinfI("res", taskInfo.Res)
 		delete(app.Setting.TaskPercent, runTaskId)
 	} else {
