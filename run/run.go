@@ -53,7 +53,7 @@ type Engine struct {
 }
 
 func NewEngine(runTaskID string) (*Engine, bool) {
-	slog.Println(slog.WARN, "new NewEngine")
+	slog.Println(slog.DEBUG, "new NewEngine")
 	if EngineArr[runTaskID] != nil {
 		slog.Println(slog.WARN, "已有任务：", runTaskID)
 		return EngineArr[runTaskID], false
@@ -77,7 +77,7 @@ func NewEngine(runTaskID string) (*Engine, bool) {
 	//wg.Wait()
 	EngineArr[runTaskID] = e
 
-	slog.Println(slog.WARN, "done NewEngine")
+	slog.Println(slog.DEBUG, "done NewEngine")
 	return e, true
 }
 
