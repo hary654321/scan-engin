@@ -60,7 +60,6 @@ func GetTaskRes(c *gin.Context) {
 	if TaskEngine == nil {
 		taskInfo.Progress = 100
 		taskInfo.Res = utils.Read(utils.GetLogPath(runTaskId, "ipInfo"))
-		utils.PrinfI("res", taskInfo.Res)
 		delete(app.Setting.TaskPercent, runTaskId)
 	} else {
 		taskInfo.Progress = TaskEngine.GetPercent()
