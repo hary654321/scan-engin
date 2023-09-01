@@ -18,12 +18,10 @@ func RecTask(c *gin.Context) {
 
 	runTaskID := c.PostForm("runTaskId")
 	taskId := c.PostForm("taskId")
+	mul := c.PostForm("mul")
 
-	slog.Println(slog.DEBUG, "runTaskID:", runTaskID, taskId)
+	slog.Println(slog.DEBUG, "runTaskID:", runTaskID, "taskId", taskId)
 
-	c.SaveUploadedFile(f, "./"+f.Filename)
-
-	mul := utils.Read("./" + f.Filename)
 	// slog.Println(slog.DEBUG, "mul:", mul, runTaskID, taskId)
 	engine, newT := run.NewEngine(runTaskID)
 	if !newT {
@@ -33,13 +31,22 @@ func RecTask(c *gin.Context) {
 		})
 		return
 	}
+	var tarArr []string
 
 	if mul != "" {
-		strArrayNew := strings.Split(mul, ",")
+		tarArr = strings.Split(mul, ",")
+	} else {
+		c.SaveUploadedFile(f, "./"+f.Filename)
 
-		engine.Total = len(strArrayNew)
+		fileinfo := utils.Read("./" + f.Filename)
+		tarArr = strings.Split(fileinfo, "\n")
+	}
 
-		for _, v := range strArrayNew {
+	if len(tarArr) > 0 {
+
+		engine.Total = len(tarArr)
+
+		for _, v := range tarArr {
 			slog.Println(slog.DEBUG, v)
 			go engine.PushTarget(v)
 		}

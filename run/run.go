@@ -234,6 +234,7 @@ func (e *Engine) stop() {
 
 func (e *Engine) GetPercent() int {
 
+	slog.Println(slog.DEBUG, e.DomainScanner.DoneCount()+e.IPScanner.DoneCount(), e.Total)
 	if e.Total == 0 {
 		return 0
 	}
