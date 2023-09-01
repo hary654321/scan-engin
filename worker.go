@@ -44,7 +44,7 @@ func main() {
 	InitKscan()
 
 	//http server
-	err := server.ListenAndServeTLS("/zrtx/config/cyberspace/.cert.pem", "/zrtx/config/cyberspace/.key.pem")
+	err := server.ListenAndServeTLS("/zrtx/config/cyberspace/cert.pem", "/zrtx/config/cyberspace/key.pem")
 	if err != nil {
 		slog.Printf(slog.DEBUG, "Server err: %v", err)
 	}
