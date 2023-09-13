@@ -1,6 +1,6 @@
 Server:
   RunMode: debug
-  HttpPort: 18001
+  HttpPort: 18000
   ReadTimeout: 60
   WriteTimeout: 60
   Version: 1.1.1
