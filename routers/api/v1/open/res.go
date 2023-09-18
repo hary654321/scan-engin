@@ -72,27 +72,6 @@ func GetTaskRes(c *gin.Context) {
 	})
 }
 
-func Image(c *gin.Context) {
-
-	url := c.Query("url")
-
-	filePath := utils.GetScreenPath() + utils.Md5(url) + ".png"
-
-	slog.Printf(slog.DEBUG, filePath)
-	//获取文件的名称
-	fileName := path.Base(filePath)
-	c.Header("Content-Type", "application/octet-stream")
-	c.Header("Content-Disposition", "attachment; filename="+fileName)
-	c.Header("Content-Transfer-Encoding", "binary")
-	c.Header("Cache-Control", "no-cache")
-	c.Header("Content-Type", "application/octet-stream")
-	c.Header("Content-Disposition", "attachment; filename="+fileName)
-	c.Header("Content-Transfer-Encoding", "binary")
-	c.File(filePath)
-
-	return
-}
-
 func TaskCount(c *gin.Context) {
 
 	code := e.SUCCESS

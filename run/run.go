@@ -47,9 +47,9 @@ type Engine struct {
 	URLScanner    *scanner.URLClient
 	HydraScanner  *scanner.HydraClient
 	RunTaskId     string
-	Start         bool
 	Total         int
 	Done          int
+	StartTime     int64
 }
 
 func NewEngine(runTaskID string) (*Engine, bool) {
@@ -69,7 +69,7 @@ func NewEngine(runTaskID string) (*Engine, bool) {
 		URLScanner:    generateURLScanner(runTaskID, wg),
 		HydraScanner:  generateHydraScanner(runTaskID, wg),
 		RunTaskId:     runTaskID,
-		Start:         false,
+		StartTime:     time.Now().Unix(),
 	}
 	e.start()
 	//启用看门狗函数定时输出负载情况
@@ -500,14 +500,11 @@ func (e *Engine) watchDog() {
 		)
 		warn := fmt.Sprintf("任务"+e.RunTaskId+"当前存活协程数：Domain：%d 个，IP：%d 个，Port：%d 个，URL：%d 个，Hydra：%d 个  ,进度：%d", nDomain, nIP, nPort, nURL, nHydra, e.GetPercent())
 		total := nDomain + nIP + nPort + nURL + nHydra
-		if total == 0 && e.Start {
+		if total == 0 && e.StartTime-time.Now().Unix() > 60*5 {
 			e.stop()
 			delete(EngineArr, e.RunTaskId)
 			delete(TaskLooP, e.RunTaskId)
 			break
-		}
-		if total > 0 {
-			e.Start = true
 		}
 		slog.Println(slog.WARN, warn)
 		time.Sleep(time.Second * 3)

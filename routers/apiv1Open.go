@@ -1,9 +1,10 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
 	"zrWorker/middleware/jwt"
 	"zrWorker/routers/api/v1/open"
+
+	"github.com/gin-gonic/gin"
 )
 
 func loadApiV1Open(r *gin.Engine) {
@@ -24,9 +25,6 @@ func loadApiV1Open(r *gin.Engine) {
 
 		//zip压缩包结果
 		openApi.GET("/zip", open.GetZip)
-
-		//图片
-		openApi.GET("/image", open.Image)
 		//结果数据
 		openApi.GET("/taskCount", open.TaskCount)
 
