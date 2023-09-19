@@ -500,7 +500,7 @@ func (e *Engine) watchDog() {
 		)
 		warn := fmt.Sprintf("任务"+e.RunTaskId+"当前存活协程数：Domain：%d 个，IP：%d 个，Port：%d 个，URL：%d 个，Hydra：%d 个  ,进度：%d", nDomain, nIP, nPort, nURL, nHydra, e.GetPercent())
 		total := nDomain + nIP + nPort + nURL + nHydra
-		if total == 0 && e.StartTime-time.Now().Unix() > 60 {
+		if total == 0 && time.Now().Unix()-e.StartTime > 60 {
 			e.stop()
 			delete(EngineArr, e.RunTaskId)
 			delete(TaskLooP, e.RunTaskId)
