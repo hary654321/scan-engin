@@ -2,7 +2,6 @@ package scanner
 
 import (
 	"net"
-	"time"
 	"zrWorker/core/slog"
 	"zrWorker/lib/udp"
 	"zrWorker/pkg/utils"
@@ -39,7 +38,7 @@ func NewPortScanner(config *Config) *PortClient {
 	client.pool.Function = func(in interface{}) {
 		//println(1)
 		nmap := gonmap.New()
-		nmap.SetTimeout(time.Second * 10)
+		nmap.SetTimeout(config.Timeout)
 		//if config.DeepInspection == true {
 		//	nmap.OpenDeepIdentify()
 		//}
@@ -53,7 +52,7 @@ func NewPortScanner(config *Config) *PortClient {
 			}
 		} else {
 			//具体进行端口扫描
-			status, response := nmap.ScanTimeout(value.addr.String(), value.num, time.Second*2)
+			status, response := nmap.ScanTimeout(value.addr.String(), value.num, config.Timeout)
 			slog.Println(slog.DEBUG, "端口状态：", value.addr.String(), ":", value.num, status.String(), response)
 			switch status {
 			case gonmap.Closed:

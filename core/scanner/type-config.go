@@ -12,7 +12,7 @@ type Config struct {
 func DefaultConfig() *Config {
 	return &Config{
 		DeepInspection: false,
-		Timeout:        time.Second * 3,
+		Timeout:        time.Second * 10,
 		Threads:        800,
 		Interval:       time.Millisecond * 300,
 	}
