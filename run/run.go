@@ -304,7 +304,7 @@ func generateIPScanner(runTaskID string, wg *sync.WaitGroup) *scanner.IPClient {
 			}
 		}
 
-		for _, port := range app.TOP_1000[:500] {
+		for _, port := range app.TOP_1000 {
 			//slog.Println(slog.DEBUG, "扫描端口：", addr.String(), ":", port)
 			go EngineArr[runTaskID].PortScanner.Push(addr, port)
 		}
