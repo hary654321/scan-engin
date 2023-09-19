@@ -282,7 +282,7 @@ func generateDomainScanner(runTaskID string, wg *sync.WaitGroup) *scanner.Domain
 func generateIPScanner(runTaskID string, wg *sync.WaitGroup) *scanner.IPClient {
 	IPConfig := scanner.DefaultConfig()
 	IPConfig.Threads = global.AppSetting.Threads * 2
-	IPConfig.Timeout = 1 * time.Second
+	IPConfig.Timeout = 5 * time.Second
 	client := scanner.NewIPScanner(IPConfig)
 	client.HandlerDie = func(addr net.IP) {
 		//slog.Println(slog.DEBUG, addr.String(), " is die")
