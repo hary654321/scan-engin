@@ -28,7 +28,7 @@ func NewIPScanner(config *Config) *IPClient {
 	client.pool.Interval = config.Interval
 	client.pool.Function = func(in interface{}) {
 		ip := in.(net.IP)
-		if ping.Pinger(ip.String(), 1) == nil {
+		if ping.Pinger(ip.String(), 8) == nil {
 			client.HandlerAlive(ip)
 			return
 		}
