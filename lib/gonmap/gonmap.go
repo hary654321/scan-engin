@@ -49,6 +49,7 @@ func initWithFilter(filter int) {
 	for _, port := range app.PORT_SCAN {
 		nmap.portProbeMap[port] = []string{}
 	}
+	//nmap指纹
 	//res, err := http.Get("https://svn.nmap.org/nmap/nmap-service-probes")
 	//if err != nil {
 	//	log.Fatal(err)

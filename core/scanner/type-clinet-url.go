@@ -2,10 +2,10 @@ package scanner
 
 import (
 	"errors"
-	"github.com/hary654321/gonmap"
 	"net/http"
 	"net/url"
 	"zrWorker/lib/appfinger"
+	"zrWorker/lib/gonmap"
 )
 
 type foo2 struct {

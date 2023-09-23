@@ -23,6 +23,7 @@ type AppSettingS struct {
 	JwtSecret             string
 	Threads               int
 	Detailed              bool
+	Proxy                 bool
 	ScanSpeed             uint32
 	AdrrArr               []string
 	Target                []string

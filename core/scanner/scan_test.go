@@ -3,7 +3,6 @@ package scanner
 import (
 	"embed"
 	"fmt"
-	"github.com/hary654321/gonmap"
 	"log"
 	"net"
 	"net/http"
@@ -11,6 +10,7 @@ import (
 	"time"
 	"zrWorker/core/slog"
 	"zrWorker/lib/appfinger"
+	"zrWorker/lib/gonmap"
 	"zrWorker/lib/ping"
 	"zrWorker/lib/simplehttp"
 	"zrWorker/lib/uri"

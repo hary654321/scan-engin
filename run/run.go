@@ -16,8 +16,10 @@ import (
 	"zrWorker/core/slog"
 	"zrWorker/global"
 	"zrWorker/lib/appfinger"
+	"zrWorker/lib/client"
 
-	"github.com/hary654321/gonmap"
+	"zrWorker/lib/gonmap"
+
 	"github.com/lcvvvv/stdio/chinese"
 
 	//"zrWorker/lib/chrome"
@@ -169,8 +171,8 @@ func (e *Engine) pushURLTarget(URL *url.URL, response *gonmap.Response) {
 		cli = simplehttp.NewClient()
 	}
 	//判断是否需要设置代理
-	if app.Setting.Proxy != "" {
-		simplehttp.SetProxy(cli, app.Setting.Proxy)
+	if global.AppSetting.Proxy {
+		simplehttp.SetProxy(cli, client.GetAddr())
 	}
 	//判断是否需要设置超时参数
 	if app.Setting.Timeout != 3*time.Second {

@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 	"zrWorker/core/slog"
+	"zrWorker/global"
 	"zrWorker/pkg/utils"
 
 	"golang.org/x/net/proxy"
@@ -51,10 +52,9 @@ func GetCli(timeout time.Duration) (*http.Client, string) {
 
 	// set our socks5 as the dialer
 	// create a socks5 dialer
-	num := utils.RanNum(len(ProxyMap))
-	addr := ProxyMap[num]
+	addr := GetAddr()
 	// slog.Println(slog.WARN, "addr", addr)
-	if addr != "0" {
+	if global.AppSetting.Proxy && addr != "0" {
 		dialer, err := proxy.SOCKS5("tcp", addr, nil, proxy.Direct)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "can't connect to the proxy:", err)
@@ -66,10 +66,16 @@ func GetCli(timeout time.Duration) (*http.Client, string) {
 	return httpClient, addr
 }
 
-func GetConn(protocol, address string, timeout time.Duration) (net.Conn, error) {
+func GetAddr() string {
 	num := utils.RanNum(len(ProxyMap))
 	addr := ProxyMap[num]
-	if addr != "0" {
+
+	return addr
+}
+
+func GetConn(protocol, address string, timeout time.Duration) (net.Conn, error) {
+	addr := GetAddr()
+	if global.AppSetting.Proxy && addr != "0" {
 		dialer, err := proxy.SOCKS5("tcp", addr, nil, proxy.Direct)
 
 		if err != nil {

@@ -6,7 +6,7 @@ import (
 	"zrWorker/lib/udp"
 	"zrWorker/pkg/utils"
 
-	"github.com/hary654321/gonmap"
+	"zrWorker/lib/gonmap"
 )
 
 type foo1 struct {

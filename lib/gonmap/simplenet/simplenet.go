@@ -7,6 +7,7 @@ import (
 	"net"
 	"strings"
 	"time"
+	"zrWorker/lib/client"
 )
 
 func tcpSend(protocol string, netloc string, data string, duration time.Duration, size int) (string, error) {
@@ -59,7 +60,9 @@ func tlsSend(protocol string, netloc string, data string, duration time.Duration
 		Timeout:  duration,
 		Deadline: time.Now().Add(duration * 2),
 	}
+
 	conn, err := tls.DialWithDialer(dialer, protocol, netloc, config)
+
 	if err != nil {
 		return "", errors.New(err.Error() + " STEP1:CONNECT")
 	}
