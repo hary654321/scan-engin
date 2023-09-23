@@ -23,7 +23,7 @@ func RecTask(c *gin.Context) {
 	taskId := c.PostForm("taskId")
 	mul := c.PostForm("mul")
 
-	slog.Println(slog.DEBUG, "runTaskID:", runTaskID, "taskId", taskId)
+	slog.Println(slog.DEBUG, "runTaskID:", runTaskID, "taskId", taskId, "mul", mul)
 
 	// slog.Println(slog.DEBUG, "mul:", mul, runTaskID, taskId)
 	engine, newT := run.NewEngine(runTaskID)
@@ -54,7 +54,7 @@ func RecTask(c *gin.Context) {
 
 			if !ping.Ping(v, 5) && global.AppSetting.Engin {
 				slog.Println(slog.DEBUG, v, "走vps")
-				client.RunTask(taskId, runTaskID, v)
+				go client.RunTask(taskId, runTaskID, v)
 				continue
 			}
 

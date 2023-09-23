@@ -45,7 +45,7 @@ func RunTask(taskId, runTaskId string, ip string) (map[string]interface{}, error
 	// if err1 != nil {
 	// 	slog.Println(slog.DEBUG, "上传文件失败", zap.Error(err0))
 	// }
-	// bodyWriter.Close()
+	bodyWriter.Close()
 	req, _ := http.NewRequest(http.MethodPost, getUrl(GetAddr(), 18000, "/api/v1/recTask"), bodyBuf)
 
 	contentType := bodyWriter.FormDataContentType()
@@ -62,9 +62,9 @@ func RunTask(taskId, runTaskId string, ip string) (map[string]interface{}, error
 		slog.Println(slog.DEBUG, "发送任务失败===", err, "target============")
 		return output, err
 	}
-	slog.Println(slog.DEBUG, "成功代理", "目标ip", "\n")
+
 	body, err := ioutil.ReadAll(resp.Body)
-	//{"code":200,"data":{"runningTasks":"3412341234","time":"1672733119","version":"1.1.1"},"msg":""}
+	slog.Println(slog.DEBUG, string(body))
 	if err != nil {
 		slog.Println(slog.DEBUG, "读取任务response失败===", err)
 		return output, err
