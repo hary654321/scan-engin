@@ -4,8 +4,12 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
+	"zrWorker/core/slog"
+	"zrWorker/global"
 	"zrWorker/lib/appfinger"
+	CC "zrWorker/lib/client"
 	"zrWorker/lib/gonmap"
+	"zrWorker/lib/simplehttp"
 )
 
 type foo2 struct {
@@ -38,6 +42,14 @@ func NewURLScanner(config *Config) *URLClient {
 		response := value.response
 		req := value.req
 		cli := value.client
+
+		//判断是否需要设置代理
+		if global.AppSetting.Proxy {
+			addra := CC.GetAddr()
+			slog.Println(slog.DEBUG, "使用代理", addra)
+			simplehttp.SetProxy(cli, addra)
+		}
+
 		if appfinger.SupportCheck(URL.Scheme) == false {
 			client.HandlerError(URL, errors.New(NotSupportProtocol))
 			return

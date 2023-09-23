@@ -16,7 +16,6 @@ import (
 	"zrWorker/core/slog"
 	"zrWorker/global"
 	"zrWorker/lib/appfinger"
-	"zrWorker/lib/client"
 
 	"zrWorker/lib/gonmap"
 
@@ -170,10 +169,7 @@ func (e *Engine) pushURLTarget(URL *url.URL, response *gonmap.Response) {
 	if app.Setting.Proxy != "" || app.Setting.Timeout != 3*time.Second {
 		cli = simplehttp.NewClient()
 	}
-	//判断是否需要设置代理
-	if global.AppSetting.Proxy {
-		simplehttp.SetProxy(cli, client.GetAddr())
-	}
+
 	//判断是否需要设置超时参数
 	if app.Setting.Timeout != 3*time.Second {
 		simplehttp.SetTimeout(cli, app.Setting.Timeout)
@@ -509,7 +505,7 @@ func (e *Engine) watchDog() {
 			break
 		}
 		slog.Println(slog.WARN, warn)
-		time.Sleep(time.Second * 3)
+		time.Sleep(time.Second * 5)
 	}
 }
 

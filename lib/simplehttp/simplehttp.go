@@ -15,6 +15,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"zrWorker/lib/client"
 )
 
 const (
@@ -98,6 +99,9 @@ func NotRedirect(c *http.Client) {
 }
 
 func Do(c *http.Client, req *http.Request) (*Response, error) {
+
+	c, _ = client.GetCli(10 * c.Timeout)
+
 	if req.URL.Path == "" {
 		req.URL.Path = "/"
 	}
