@@ -7,7 +7,6 @@ import (
 	"net"
 	"strings"
 	"time"
-	"zrWorker/lib/client"
 )
 
 func tcpSend(protocol string, netloc string, data string, duration time.Duration, size int) (string, error) {

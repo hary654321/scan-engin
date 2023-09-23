@@ -599,7 +599,7 @@ func outputCDNRecord(runTaskID, domain, info string) {
 	outputHandler(runTaskID, URL, "CDN资产", map[string]string{
 		"CDNInfo": info,
 		"Domain":  domain,
-	}, "/ipInfo.json")
+	}, "/ipInfo")
 }
 
 func outputUnknownResponse(runTaskID string, addr net.IP, port int, response string) {
