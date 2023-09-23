@@ -2,16 +2,19 @@ package tcpping
 
 import (
 	"fmt"
-	"net"
 	"runtime"
 	"strings"
 	"time"
+	"zrWorker/lib/client"
 )
 
-var CommonPorts = []int{22, 23, 80, 139, 512, 443, 445, 3389, 8088}
+var CommonPorts = []int{
+	80, 443, 7547, 22, 5060, 8080, 8443, 161, 2083, 2096, 8000,
+	21, 2087, 8888, 53, 8089, 2082, 2095, 30005, 2086, 554,
+}
 
-func Ping(addr string, port int, timeout time.Duration) error {
-	return connect("tcp", addr, port, timeout)
+func Ping(ip string, port int, timeout time.Duration) error {
+	return connect("tcp", ip, port, timeout)
 }
 
 func PingPorts(ip string, timeout time.Duration) (err error) {
@@ -23,9 +26,11 @@ func PingPorts(ip string, timeout time.Duration) (err error) {
 	return err
 }
 
-func connect(protocol string, addr string, port int, duration time.Duration) error {
-	host := fmt.Sprintf("%s:%d", addr, port)
-	conn, err := net.DialTimeout(protocol, host, duration)
+func connect(protocol string, ip string, port int, duration time.Duration) error {
+	address := fmt.Sprintf("%s:%d", ip, port)
+
+	//在这里设置代理
+	conn, err := client.GetConn(protocol, address, duration)
 	if err != nil {
 		return err
 	}
