@@ -166,6 +166,6 @@ func TestPortFinger(t *testing.T) {
 }
 
 func TestPing(t *testing.T) {
-	res := ping.Pinger("1.0.125.62", 1)
+	res := ping.Pinger("www.baidu.com", 1)
 	slog.Println(slog.DEBUG, "res", res)
 }

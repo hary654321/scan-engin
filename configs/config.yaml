@@ -13,6 +13,7 @@ App:
   Threads: 2000
   Detailed: false
   Proxy: true
+  Engin: true
   #每秒扫描的ip数
   ScanSpeed: 5000
   DefaultPageSize: 10

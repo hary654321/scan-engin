@@ -24,6 +24,7 @@ type AppSettingS struct {
 	Threads               int
 	Detailed              bool
 	Proxy                 bool
+	Engin                 bool
 	ScanSpeed             uint32
 	AdrrArr               []string
 	Target                []string
