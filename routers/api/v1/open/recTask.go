@@ -7,7 +7,6 @@ import (
 	"zrWorker/core/slog"
 	"zrWorker/global"
 	"zrWorker/lib/cache"
-	"zrWorker/lib/ping"
 	"zrWorker/pkg/e"
 	"zrWorker/pkg/utils"
 	"zrWorker/run"
@@ -52,7 +51,7 @@ func RecTask(c *gin.Context) {
 		for _, v := range tarArr {
 			slog.Println(slog.DEBUG, v)
 
-			if !ping.Ping(v, 5) && global.AppSetting.Engin {
+			if global.AppSetting.Engin {
 				slog.Println(slog.DEBUG, v, "走vps")
 				go client.RunTask(taskId, runTaskID, v)
 				continue
