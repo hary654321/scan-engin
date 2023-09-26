@@ -12,7 +12,7 @@ import (
 	"zrWorker/pkg/utils"
 )
 
-var ProxyMap = []string{"104.129.182.86", "174.137.55.184", "104.243.23.33", "104.129.180.98"}
+var ProxyMap = []string{"104.129.182.86", "174.137.55.184", "104.243.23.33", "104.129.180.98", "104.244.93.105"}
 
 func GetAddr() string {
 	num := utils.RanNum(len(ProxyMap))
