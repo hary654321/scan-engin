@@ -46,12 +46,15 @@ func (c *IPClient) Push(ips ...net.IP) {
 	//println(ips)
 	//slog.Println(slog.DEBUG, "pushIp：", ips)
 	for _, ip := range ips {
+		if len(cache.Get(ip.String())) > 0 {
+			slog.Println(slog.WARN, "ip刚刚扫描过:", ip.String())
+		} else {
+			c.pool.Push(ip)
+			time := utils.GetTime()
+			//otherScanner.SaveSubDomain(domain)
+			cache.Set(ip.String(), []byte(time))
 
-		c.pool.Push(ip)
-		time := utils.GetTime()
-		//otherScanner.SaveSubDomain(domain)
-		cache.Set(ip.String(), []byte(time))
-
+		}
 	}
 }
 
