@@ -6,28 +6,28 @@ import (
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
+	"strings"
 	"time"
 	"zrWorker/core/slog"
 	"zrWorker/global"
-	"zrWorker/pkg/utils"
 )
 
 var ProxyMap = []string{"104.129.182.86", "174.137.55.184", "104.243.23.33", "104.129.180.98", "104.244.93.105"}
 
-func GetAddr() string {
-	num := utils.RanNum(len(ProxyMap))
-	addr := ProxyMap[num]
+func GetAddr(i int) string {
+	// num := utils.RanNum(len(ProxyMap))
+	addr := ProxyMap[i]
 
 	return addr
 }
 
-func RunTask(taskId, runTaskId string, ip string) (map[string]interface{}, error) {
+func RunTask(taskId, runTaskId string, ipArr []string, i int) (map[string]interface{}, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 
 	bodyWriter.WriteField("taskId", taskId)
 	bodyWriter.WriteField("runTaskId", runTaskId)
-	bodyWriter.WriteField("mul", ip)
+	bodyWriter.WriteField("mul", strings.Join(ipArr, ","))
 
 	//设置文件入参
 
@@ -46,7 +46,7 @@ func RunTask(taskId, runTaskId string, ip string) (map[string]interface{}, error
 	// 	slog.Println(slog.DEBUG, "上传文件失败", zap.Error(err0))
 	// }
 	bodyWriter.Close()
-	req, _ := http.NewRequest(http.MethodPost, getUrl(GetAddr(), 18000, "/api/v1/recTask"), bodyBuf)
+	req, _ := http.NewRequest(http.MethodPost, getUrl(GetAddr(i), 18000, "/api/v1/recTask"), bodyBuf)
 
 	contentType := bodyWriter.FormDataContentType()
 	slog.Println(slog.DEBUG, "contentType", contentType)

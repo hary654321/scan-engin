@@ -5,7 +5,6 @@ import (
 	"strings"
 	"zrWorker/core/client"
 	"zrWorker/core/slog"
-	"zrWorker/global"
 	"zrWorker/lib/cache"
 	"zrWorker/pkg/e"
 	"zrWorker/pkg/utils"
@@ -48,17 +47,26 @@ func RecTask(c *gin.Context) {
 
 		engine.Total = len(tarArr)
 
-		for _, v := range tarArr {
-			slog.Println(slog.DEBUG, v)
+		addrCount := len(client.ProxyMap)
 
-			if global.AppSetting.Engin {
-				slog.Println(slog.DEBUG, v, "走vps")
-				go client.RunTask(taskId, runTaskID, v)
-				continue
-			}
-
-			go engine.PushTarget(v)
+		bc := engine.Total / addrCount
+		for i := 0; i < addrCount; i++ {
+			s := bc * i
+			e := bc * (i + 1)
+			go client.RunTask(taskId, runTaskID, tarArr[s:e], i)
 		}
+
+		// for _, v := range tarArr {
+		// 	slog.Println(slog.DEBUG, v)
+
+		// 	if global.AppSetting.Engin {
+		// 		slog.Println(slog.DEBUG, v, "走vps")
+		// 		go client.RunTask(taskId, runTaskID, v)
+		// 		continue
+		// 	}
+
+		// 	go engine.PushTarget(v)
+		// }
 	}
 
 	//任务信息记录下来
