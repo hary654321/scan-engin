@@ -1,0 +1,15 @@
+input {
+  file {
+    path => "/u4/base_whois_data/day"
+    codec => "json"
+    start_position => "beginning"
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://172.16.160.96:9200"]
+    index => "cyberspace-resources_month"
+  }
+}
+

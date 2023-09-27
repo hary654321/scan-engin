@@ -1,0 +1,16 @@
+input {
+  elasticsearch {
+    hosts => ["http://172.16.130.138:9200"]
+    index => "cyberspace-resources_day"
+    scroll => "5m"
+    docinfo => true
+  }
+}
+
+output {
+  file {
+    path => "/u4/cybc/day.json"
+    codec => "json_lines"
+  }
+}
+
